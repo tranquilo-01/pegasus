@@ -16,43 +16,17 @@ import java.util.Map;
 
 public class TextGenerator extends Abstract {
 
-    private PegasusBag mBag;
-    private File mOutputDirectory;
 
     @Override
     public void initialize(PegasusBag bag) throws CodeGeneratorException {
-        this.mBag = bag;
-        // You can configure the output directory via properties
-        String outputDir = bag.getPlannerOptions().getOutputDirectory();
-        if (outputDir == null || outputDir.isEmpty()) {
-//            FIXME: manage to read from properties file or throw an exception
-            outputDir = "/home/tranquilo/__STUDIA__/__infa__/sem08/pp/pegasus-testy/example-workflow/pegasus-files";
-//            throw new CodeGeneratorException("Output directory is not set in properties");
-        }
-        this.mOutputDirectory = new File(outputDir);
-        if (!this.mOutputDirectory.exists()) {
-            if (!this.mOutputDirectory.mkdirs()) {
-                throw new CodeGeneratorException("Failed to create output directory: " + this.mOutputDirectory.getAbsolutePath());
-            }
-        }
+        super.initialize(bag);
     }
 
     @Override
     public Collection<File> generateCode(ADag dag) throws CodeGeneratorException {
         List<File> generatedFiles = new ArrayList<>();
-//        File dagFile = new File(this.mOutputDirectory, dag.getName() + ".txt");
-//        try (FileWriter writer = new FileWriter(dagFile)) {
-//            writer.write("DAG Name: " + dag.getName() + "\n");
-//            writer.write("Number of Jobs: " + dag.getJobs().size() + "\n");
-//            writer.write("Jobs:\n");
-//            for (Job job : dag.getJobs()) {
-//                writer.write("\tJob ID: " + job.getID() + ", Name: " + job.getName() + "\n");
-//            }
-//        } catch (IOException e) {
-//            throw new CodeGeneratorException("Error writing DAG file: " + dagFile.getAbsolutePath(), e);
-//        }
 
-        File generatedFile = new File(this.mOutputDirectory, "text_generator_output.txt");
+        File generatedFile = new File(this.mSubmitFileDir, "text_generator_output.txt");
         try (FileWriter writer = new FileWriter(generatedFile)) {
             writer.write(dag.toString());
         } catch (IOException e) {
@@ -67,10 +41,6 @@ public class TextGenerator extends Abstract {
         // This method is not required for the simple text generator
     }
 
-    @Override
-    public boolean startMonitoring() {
-        return false;
-    }
 
     @Override
     public Map<String, String> getAdditionalBraindumpEntries(ADag workflow) {
