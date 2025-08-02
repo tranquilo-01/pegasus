@@ -1,14 +1,16 @@
 package edu.isi.pegasus.planner.code.generator.json;
 
-public class Job {
+import java.util.List;
 
-    private final int id;
-    private final int[] requirements;
+public class Node {
+
+    private final String id;
+    private final List<String> requirements;
     private final Input input;
     private final String command;
     private final String output_file;
 
-    public Job(int id, int[] requirements, Input input, String command, String output_file) {
+    public Node(String id, List<String> requirements, Input input, String command, String output_file) {
         this.id = id;
         this.requirements = requirements;
         this.input = input;
@@ -16,11 +18,11 @@ public class Job {
         this.output_file = output_file;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public int[] getRequirements() {
+    public List<String> getRequirements() {
         return requirements;
     }
 
