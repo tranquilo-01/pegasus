@@ -1,6 +1,7 @@
 package edu.isi.pegasus.planner.code.generator.json;
 
 import java.util.List;
+import java.util.Set;
 
 public class Node {
 
@@ -8,14 +9,14 @@ public class Node {
     private final List<String> requirements;
     private final Input input;
     private final String command;
-    private final String output_file;
+    private final Set<String> output_files;
 
-    public Node(String id, List<String> requirements, Input input, String command, String output_file) {
+    public Node(String id, List<String> requirements, Input input, String command, Set<String> output_files) {
         this.id = id;
         this.requirements = requirements;
         this.input = input;
         this.command = command;
-        this.output_file = output_file;
+        this.output_files = output_files;
     }
 
     public String getId() {
@@ -34,7 +35,7 @@ public class Node {
         return command;
     }
 
-    public String getOutput_file() {
-        return output_file;
+    public Set<String> getOutput_files() {
+        return output_files;
     }
 }

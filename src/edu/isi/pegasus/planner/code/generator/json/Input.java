@@ -5,12 +5,12 @@ public class Input {
 
     private final InputType type;
     private final String path;
-    private final int[] jobs_id;
+    private final String job_id;
 
-    public Input(InputType type, String path, int[] jobs_id){
+    public Input(InputType type, String path, String job_id){
         this.type = type;
         this.path = path;
-        this.jobs_id = jobs_id;
+        this.job_id = job_id;
     }
 
     public InputType getType() {
@@ -21,8 +21,8 @@ public class Input {
         return path;
     }
 
-    public int[] getJobs_id() {
-        return jobs_id;
+    public String getJobs_id() {
+        return job_id;
     }
 
 

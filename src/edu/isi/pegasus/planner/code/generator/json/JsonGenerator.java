@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import edu.isi.pegasus.planner.classes.ADag;
 import edu.isi.pegasus.planner.classes.Job;
+import edu.isi.pegasus.planner.classes.PegasusFile;
 import edu.isi.pegasus.planner.code.CodeGeneratorException;
 import edu.isi.pegasus.planner.code.generator.Abstract;
 import edu.isi.pegasus.planner.partitioner.graph.GraphNode;
@@ -44,6 +45,7 @@ public class JsonGenerator extends Abstract {
 
         for (Iterator<GraphNode> it = dag.nodeIterator(); it.hasNext(); ) {
             GraphNode graphNode = it.next();
+            Job job = (Job) graphNode.getContent();
 
             Collection<GraphNode> parents = graphNode.getParents();
             ArrayList<String> requirements = new ArrayList<>();
@@ -51,9 +53,21 @@ public class JsonGenerator extends Abstract {
                 requirements.add(parent.getID());
             }
 
-            Node jsonNode = new Node(graphNode.getID(), requirements, new Input(InputType.JOB, "path", new int[]{123}), "komenda", "output");
+            Set<String> outputFileNames = new HashSet<>();
+
+            for(Object file : job.outputFiles) {
+                String fileName = ((PegasusFile) file).getLFN();
+                outputFileNames.add(fileName);
+            }
+
+            String command = job.executable + " " + job.getArguments();
+
+
+            Node jsonNode = new Node(graphNode.getID(), requirements, new Input(InputType.JOB, job.executable, job.jobID), command, outputFileNames);
 
             nodes.add(jsonNode);
+            System.out.println("Converted node: " + jsonNode.getId());
+            System.out.println(graphNode.getBag());
         }
         return nodes;
     }
