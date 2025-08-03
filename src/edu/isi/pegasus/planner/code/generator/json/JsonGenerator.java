@@ -42,40 +42,35 @@ public class JsonGenerator extends Abstract {
     private Set<Node> convertToNodes(ADag dag) {
         Set<Node> nodes = new HashSet<>();
 
-
         for (Iterator<GraphNode> it = dag.nodeIterator(); it.hasNext(); ) {
             GraphNode graphNode = it.next();
             Job job = (Job) graphNode.getContent();
 
             Collection<GraphNode> parents = graphNode.getParents();
             ArrayList<String> requirements = new ArrayList<>();
-            for(GraphNode parent : parents) {
+            for (GraphNode parent : parents) {
                 requirements.add(parent.getID());
             }
 
             Set<String> outputFileNames = new HashSet<>();
 
-            for(Object file : job.outputFiles) {
+            for (Object file : job.outputFiles) {
                 String fileName = ((PegasusFile) file).getLFN();
                 outputFileNames.add(fileName);
             }
 
             String command = job.executable + " " + job.getArguments();
 
-
             Node jsonNode = new Node(graphNode.getID(), requirements, new Input(InputType.JOB, job.executable, job.jobID), command, outputFileNames);
 
             nodes.add(jsonNode);
-            System.out.println("Converted node: " + jsonNode.getId());
-            System.out.println(graphNode.getBag());
         }
         return nodes;
     }
 
 
-
     @Override
     public void generateCode(ADag dag, Job job) throws CodeGeneratorException {
-// not used for now
+        // not used for now
     }
 }
