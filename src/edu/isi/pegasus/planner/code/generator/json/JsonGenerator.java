@@ -47,7 +47,7 @@ public class JsonGenerator extends Abstract {
             Job job = (Job) graphNode.getContent();
 
             Collection<GraphNode> parents = graphNode.getParents();
-            ArrayList<String> requirements = new ArrayList<>();
+            Set<String> requirements = new HashSet<>();
             for (GraphNode parent : parents) {
                 requirements.add(parent.getID());
             }
@@ -65,9 +65,16 @@ public class JsonGenerator extends Abstract {
                 inputFileNames.add(fileName);
             }
 
-            String command = job.executable + " " + job.getArguments();
+            List<String> exec = new ArrayList<>();
+            exec.add(job.executable);
 
-            Node jsonNode = new Node(graphNode.getID(), requirements, new Input(InputType.JOB, job.executable, job.jobID), command, inputFileNames, outputFileNames, job.getDirectory());
+            String args = job.getArguments();
+            if (args != null && !args.trim().isEmpty()) {
+                exec.addAll(List.of(args.split("\\s+")));
+            }
+
+            System.out.println(job.getDirectory());
+            Node jsonNode = new Node(graphNode.getID(), exec, requirements, inputFileNames, outputFileNames);
 
             nodes.add(jsonNode);
         }
