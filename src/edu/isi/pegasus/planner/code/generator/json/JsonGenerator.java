@@ -53,15 +53,21 @@ public class JsonGenerator extends Abstract {
             }
 
             Set<String> outputFileNames = new HashSet<>();
+            Set<String> inputFileNames = new HashSet<>();
 
             for (Object file : job.outputFiles) {
                 String fileName = ((PegasusFile) file).getLFN();
                 outputFileNames.add(fileName);
             }
 
+            for (Object file : job.inputFiles) {
+                String fileName = ((PegasusFile) file).getLFN();
+                inputFileNames.add(fileName);
+            }
+
             String command = job.executable + " " + job.getArguments();
 
-            Node jsonNode = new Node(graphNode.getID(), requirements, new Input(InputType.JOB, job.executable, job.jobID), command, outputFileNames);
+            Node jsonNode = new Node(graphNode.getID(), requirements, new Input(InputType.JOB, job.executable, job.jobID), command, inputFileNames, outputFileNames, job.getDirectory());
 
             nodes.add(jsonNode);
         }
